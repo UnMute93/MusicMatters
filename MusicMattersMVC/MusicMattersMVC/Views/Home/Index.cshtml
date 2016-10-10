@@ -1,0 +1,17 @@
+﻿@model List<MusicMattersMVC.ViewModels.HomeVM>
+@{
+    Layout = "_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+<div>
+    Users registered:
+    @for (int i=0; i < Model.Count; i++)
+    {
+        @Html.ActionLink(Model[i].UserName, "Index", "Profile", new { id = Model[i].UserId }, null)
+        if (i != Model.Count - 1)
+        {
+            Html.Raw(", ");
+        }
+    }
+</div>

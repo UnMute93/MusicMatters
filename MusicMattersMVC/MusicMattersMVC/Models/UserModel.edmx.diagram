@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="26e5ded69396457aaa0dcec9910518eb" Name="Diagram1">
+        <EntityTypeShape EntityType="MusicMattersDBModel.Album" Width="1.5" PointX="6" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.Artist" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.Comment" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.CommentHistory" Width="1.5" PointX="8.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.Flag" Width="1.5" PointX="5.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.Flaggable" Width="1.5" PointX="8" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.Song" Width="1.5" PointX="8.25" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.User" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.User_Artist" Width="1.5" PointX="6" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicMattersDBModel.UserProfile" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_Album_Artist" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_Song_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_User_Artist_Artist" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_Comment_Comment" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_Comment_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_Flaggable_Flag" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_User_Artist_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicMattersDBModel.FK_UserProfile_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,16 @@
+﻿@model MusicMattersMVC.Models.User
+@{
+    Layout = "_Layout.cshtml";
+    ViewBag.Title = "Register";
+}
+
+<div>
+    @using(Html.BeginForm("Register", "HomeController", FormMethod.Post))
+    {
+        @Html.TextBoxFor(Model => Model.Username)
+        @Html.PasswordFor(Model => Model.Pass)
+        @Html.Password("PasswordRepeat")
+        @Html.TextBoxFor(Model => Model.Email)
+        <input type="submit" value="Register" />
+    }
+</div>
