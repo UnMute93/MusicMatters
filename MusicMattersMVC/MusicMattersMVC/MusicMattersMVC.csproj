@@ -114,7 +114,9 @@
       <DependentUpon>UserModel.edmx</DependentUpon>
       <LastGenOutput>UserModel.cs</LastGenOutput>
     </Content>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -142,6 +144,8 @@
     <Compile Include="Models\Flaggable.cs">
       <DependentUpon>UserModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\Song.cs">
       <DependentUpon>UserModel.tt</DependentUpon>
     </Compile>
@@ -173,6 +177,7 @@
     <Compile Include="ViewModels\BaseVM.cs" />
     <Compile Include="ViewModels\HomeVM.cs" />
     <Compile Include="ViewModels\ProfileVM.cs" />
+    <Compile Include="ViewModels\RegisterVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

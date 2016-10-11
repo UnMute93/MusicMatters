@@ -35,31 +35,57 @@ namespace MusicMattersMVC.Controllers
         [HttpGet]
         public ActionResult Register()
         {
-            User user = new User();
+            RegisterVM user = new RegisterVM();
             return View(user);
         }
 
         [HttpPost]
-        public ActionResult Register(User user)
+        public ActionResult Register(RegisterVM user)
         {
-            //TODO Validate before hash
-            byte[] pass = System.Text.Encoding.Unicode.GetBytes(user.Pass);
-            byte[] salt = GenerateSalt();
-            byte[] hash = GenerateHash(pass, salt);
+            ViewBag.ValidateError = "";
+            if (ModelState.IsValid)
+            {
+                if (ValidateUsernameEmail(user))
+                {
+                    byte[] pass = System.Text.Encoding.Unicode.GetBytes(user.Pass);
+                    byte[] salt = GenerateSalt();
+                    byte[] hash = GenerateHash(pass, salt);
+                    User newUser = new User();
 
-            user.Salt = salt.ToString();
-            user.Pass = hash.ToString();
+                    newUser.Username = user.Username;
+                    newUser.Email = user.Email;
+                    newUser.Salt = BitConverter.ToString(salt).Replace("-", "").ToLower();
+                    newUser.Pass = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
-            db.User.Add(user);
-
-            //ModelError()
-            return Redirect("/");
+                    db.User.Add(newUser);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                            }
+                        }
+                    }
+                    
+                    CreateProfile(newUser.Id);
+                }
+                else
+                    ViewBag.ValidateError = "Username or Email address already exists!";
+                return View(user);
+            }
+            return View(user);
         }
 
         private byte[] GenerateSalt()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] salt = new byte[64];
+            byte[] salt = new byte[32];
             rng.GetBytes(salt);
             rng.Dispose();
             return salt;
@@ -73,6 +99,41 @@ namespace MusicMattersMVC.Controllers
             HashAlgorithm hashAlgo = new SHA256Managed();
             byte[] hash = hashAlgo.ComputeHash(combined);
             return hash;
+        }
+
+        private bool ValidateUsernameEmail(RegisterVM user)
+        {
+            var result = (from item in db.User
+                         where item.Username == user.Username || item.Email == user.Email
+                         select item).Count();
+            if (result == 1)
+                return false;
+            else
+                return true;
+        }
+
+        private void CreateProfile(int userId)
+        {
+            UserProfile newProfile = new UserProfile();
+            newProfile.UserId = userId;
+            newProfile.ShowEmail = 0;
+            newProfile.BackgroundColor = "#FFFFFF";
+
+            db.UserProfile.Add(newProfile);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                    {
+                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                    }
+                }
+            }
         }
     }
 }

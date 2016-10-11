@@ -1,16 +1,25 @@
-﻿@model MusicMattersMVC.Models.User
+﻿@model MusicMattersMVC.ViewModels.RegisterVM
 @{
-    Layout = "_Layout.cshtml";
+    Layout = "../Shared/_Layout.cshtml";
     ViewBag.Title = "Register";
 }
 
 <div>
-    @using(Html.BeginForm("Register", "HomeController", FormMethod.Post))
+    @using(Html.BeginForm("Register", "Home", FormMethod.Post))
     {
+        <b>@ViewBag.ValidateError</b><br />
+        @Html.LabelFor(Model => Model.Username)
         @Html.TextBoxFor(Model => Model.Username)
+        @Html.ValidationMessageFor(Model => Model.Username)<br />
+        @Html.LabelFor(Model => Model.Pass)
         @Html.PasswordFor(Model => Model.Pass)
-        @Html.Password("PasswordRepeat")
+        @Html.ValidationMessageFor(Model => Model.Pass)<br />
+        @Html.LabelFor(Model => Model.ComparePass)
+        @Html.PasswordFor(Model => Model.ComparePass)
+        @Html.ValidationMessageFor(Model => Model.ComparePass)<br />
+        @Html.LabelFor(Model => Model.Email)
         @Html.TextBoxFor(Model => Model.Email)
+        @Html.ValidationMessageFor(Model => Model.Email)<br />
         <input type="submit" value="Register" />
     }
 </div>
