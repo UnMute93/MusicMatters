@@ -58,26 +58,56 @@ namespace MusicMattersMVC.Controllers
                     newUser.Pass = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
                     db.User.Add(newUser);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-                    {
-                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                        {
-                            foreach (var validationError in entityValidationErrors.ValidationErrors)
-                            {
-                                Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-                            }
-                        }
-                    }
-                    
-                    CreateProfile(newUser.Id);
+                    db.SaveChanges();
+
+                    UserProfile newProfile = new UserProfile();
+                    newProfile.UserId = newUser.Id;
+                    newProfile.ShowEmail = 0;
+                    newProfile.BackgroundColor = "#FFFFFF";
+
+                    db.UserProfile.Add(newProfile);
+                    db.SaveChanges();
                 }
                 else
                     ViewBag.ValidateError = "Username or Email address already exists!";
-                return View(user);
+                return Redirect("/");
+            }
+            return View(user);
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            LoginVM user = new LoginVM();
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Login(LoginVM user)
+        {
+            ViewBag.ValidationError = "";
+            if (ModelState.IsValid)
+            {
+                var saltResult = from item in db.User
+                             where item.Username == user.Username
+                             select item.Salt;
+                if (saltResult.Count() == 1)
+                {
+                    byte[] salt = Convert.FromBase64String(saltResult.First());
+                    byte[] pass = Convert.FromBase64String(user.Pass);
+                    byte[] hash = GenerateHash(pass, salt);
+                    string hashedPass = BitConverter.ToString(hash).Replace("-", "").ToLower();
+
+                    var loginResult = from item in db.User
+                                     where item.Username == user.Username && item.Pass == hashedPass
+                                     select item.Count();
+                    if (loginResult == 1)
+                    {
+                        //Authorize
+                        return Redirect("/");
+                    }
+                }
+                ViewBag.ValidationError = "Username or password is incorrect.";
             }
             return View(user);
         }
@@ -114,26 +144,7 @@ namespace MusicMattersMVC.Controllers
 
         private void CreateProfile(int userId)
         {
-            UserProfile newProfile = new UserProfile();
-            newProfile.UserId = userId;
-            newProfile.ShowEmail = 0;
-            newProfile.BackgroundColor = "#FFFFFF";
-
-            db.UserProfile.Add(newProfile);
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-            {
-                foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in entityValidationErrors.ValidationErrors)
-                    {
-                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-                    }
-                }
-            }
+            
         }
     }
 }

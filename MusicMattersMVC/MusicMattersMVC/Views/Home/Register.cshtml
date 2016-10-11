@@ -7,7 +7,6 @@
 <div>
     @using(Html.BeginForm("Register", "Home", FormMethod.Post))
     {
-        <b>@ViewBag.ValidateError</b><br />
         @Html.LabelFor(Model => Model.Username)
         @Html.TextBoxFor(Model => Model.Username)
         @Html.ValidationMessageFor(Model => Model.Username)<br />
@@ -20,6 +19,7 @@
         @Html.LabelFor(Model => Model.Email)
         @Html.TextBoxFor(Model => Model.Email)
         @Html.ValidationMessageFor(Model => Model.Email)<br />
-        <input type="submit" value="Register" />
+        <input type="submit" value="Register" /><br />
+        <b>@ViewBag.ValidateError</b>
     }
 </div>
